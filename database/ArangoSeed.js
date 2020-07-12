@@ -1,9 +1,16 @@
 const Chance = require('chance');
-const mongoose = require('mongoose');
-const Review = require('./Reviews.js');
-const { generateNumBetween, pickBiased, generateAttractionIds } = require('./helpers.js');
-
+const { generateNumBetween, pickBiased} = require('./helpers.js');
+// from my understanding arango accepts json arguments and its schema is defined as any javascript object
 const chance = new Chance();
+//readable stream from scratch and make drain event handle it from pipe to make a writeable stream
+
+
+//first make a small sample of data to make sure it works with arango
+const docs = [];
+const idNumbers =[]
+for (i = 0; i < 1000; i++) {
+ idNumbers.push(`${i}`.padStart(4,'0'));
+}
 
 const languages = [
   'English',
@@ -54,42 +61,37 @@ const commonWords = [
   'location',
 ];
 
+const url=`https://sdcreviewsprofilepic.s3-us-west-2.amazonaws.com/profilepictures/img`
+
 const weightedRatings = [4, 4, 4, 4, 4, 3, 3, 3, 3, 2, 2, 2, 1, 1, 0];
-
-const uploadBase = 'https://fec-images-6-18-20.s3-us-west-2.amazonaws.com/userUploads';
-const profileBase = 'https://fec-images-6-18-20.s3-us-west-2.amazonaws.com/profiles';
-
-const profilePhotos = []; //every review will have a poto
-for (let i = 0; i < 20; i += 1) {
-  profilePhotos.push(`${profileBase}/img${i}.jpg`);
-}
-
-const userUploadPhotos = []; //most will be 0 but randomly 4-8 images
-for (let i = 0; i < 100; i += 1) {
-  userUploadPhotos.push(`${uploadBase}/img${i}.jpg`);
-}
-
 const travelTypes = ['Family', 'Couple', 'Solo', 'Business', 'Friends'];
-
 const years = [2016, 2017, 2018, 2019, 2020];
 
-const attractionIds = generateAttractionIds();
+const docs = [];
+const idNumbers =[]
+for (i = 0; i < 1000; i++) {
+ idNumbers.push(`${i}`.padStart(4,'0'));
+}
+idNumbers.forEach((num)=>{
 
-const seedData = [];
-
-attractionIds.forEach((id) => {// maske number of reviews 6 - 12
-  const numReviews = generateNumBetween(25, 200);
+  const attractionId= num
   const attractionName = chance.city();
 
-  for (let i = 0; i < numReviews; i += 1) {
-    const year = years[generateNumBetween(0, years.length - 1)];
+  const location={
+    attractionId,
+    attractionName,
+    reviews:[],
+  }
+
+  const varNumReview = chance.integer({ min: 10, max: 20 });
+  for(var j=0; j< varNumReview; j++){
+    const year = chance.year({ min: 2015, max: 2020 });
     const expDate = chance.date({ year });
     const month = expDate.getMonth();
     const monthsAfter = generateNumBetween(0, 3);
     const createdAt = chance.date({ year, month: month + monthsAfter });
     const lang = pickBiased(languages);
     const langIndex = languages.indexOf(lang);
-    const numImages = pickBiased([0, 1, 2, 3]);
     const name = chance.name();
     const title = chance.sentence({ words: generateNumBetween(1, 4) });
     const rating = weightedRatings[generateNumBetween(0, weightedRatings.length - 1)];
@@ -101,10 +103,9 @@ attractionIds.forEach((id) => {// maske number of reviews 6 - 12
     body.splice(12, 0, commonWords[generateNumBetween(0, commonWords.length - 1)]);
     body = body.join(' ');
 
-    const review = {
-      attractionId: id,
-      attractionName,
-      rating,
+    location.reviews.push(
+      review={
+        rating,
       travelType: travelTypes[generateNumBetween(0, travelTypes.length - 1)],
       expDate,
       lang,
@@ -118,33 +119,14 @@ attractionIds.forEach((id) => {// maske number of reviews 6 - 12
         originRegion: regions[langIndex][generateNumBetween(0, regions[langIndex].length - 1)],
         contributions: generateNumBetween(0, 1000),
         name,
-        profileImage: profilePhotos[generateNumBetween(0, profilePhotos.length - 1)],
+        profileImage: `${url}${chance.integer({ min: 1, max: 1000 })}.jpg`,
       },
-      uploadImages: [],
-    };
-
-    for (let j = 0; j < numImages; j += 1) {
-      review.uploadImages.push({
-        id: id + i + j,
-        helpful: false,
-        url: userUploadPhotos[generateNumBetween(0, userUploadPhotos.length - 1)],
-        username: name,
-        createdAt,
-        reviewTitle: title,
-        reviewRating: rating,
-      });
-    }
-
-    seedData.push(review);
+      }
+    )
   }
-});
+})
 
-Review.create(seedData)
-  .then(() => {
-    console.log('success');
-    mongoose.connection.close();
-  })
-  .catch((err) => {
-    console.log(err);
-    mongoose.connection.close();
-  });
+
+//__key
+
+//essentialy model the json object the same as seed.js

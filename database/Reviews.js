@@ -8,7 +8,7 @@ mongoose.Promise = global.Promise;
 const reviewSchema = mongoose.Schema({
   attractionId: String,
   attractionName: String,
-  rating: Number,
+  rating: Number,       // lin 11 to 27 should be nested in your schema
   travelType: String,
   expDate: Date,
   lang: String,

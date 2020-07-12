@@ -4,3 +4,4 @@ client/public/bundle.js
 client/public/bundle.js.map
 images
 specs/coverage
+users.csv
