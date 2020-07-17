@@ -9,7 +9,7 @@ const chance = new Chance();
 const docs = [];
 const idNumbers =[]
 for (i = 0; i < 1000; i++) {
- idNumbers.push(`${i}`.padStart(4,'0'));
+ idNumbers.push(`${i}`.padStart(8,'0'));
 }
 
 const languages = [
@@ -70,7 +70,7 @@ const years = [2016, 2017, 2018, 2019, 2020];
 const docs = [];
 const idNumbers =[]
 for (i = 0; i < 1000; i++) {
- idNumbers.push(`${i}`.padStart(4,'0'));
+ idNumbers.push(`${i}`.padStart(8,'0'));
 }
 idNumbers.forEach((num)=>{
 

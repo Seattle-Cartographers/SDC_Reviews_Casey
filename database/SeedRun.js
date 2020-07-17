@@ -61,18 +61,21 @@ const years = [2016, 2017, 2018, 2019, 2020];
 
 //call fs write stream
 //give it the info and then call write
-const writeUsers = fs.createWriteStream('ArangoTest.json');
-writeUsers.write( 'location', 'utf8');
+const writeUsers = fs.createWriteStream('NewTest.json');
+writeUsers.write( '[', 'utf8');
 function writeTenMillionUsers(writer, encoding, callback) {
-  let i = 100;
+  let i = 10000000;
   let id = 0;
   function write() {
     let ok = true;
     do {
+      if(i%100000===0){
+        console.log(`sad boy times,: ${i}`)
+      }
       i -= 1;
       id += 1;
       //make you code here--------------------------------------------------
-      const attractionId= id
+      const attractionId= `${id}`.padStart(8,'0')
       const attractionName = chance.city();
 
       const location={
@@ -80,7 +83,8 @@ function writeTenMillionUsers(writer, encoding, callback) {
         attractionName,
         reviews:[],
       }
-      const varNumReview = chance.integer({ min: 10, max: 20 });
+
+      let varNumReview = chance.integer({ min: 5, max: 6 });
   for(var j=0; j< varNumReview; j++){
     const year = chance.year({ min: 2015, max: 2020 });
     const expDate = chance.date({ year });
@@ -93,15 +97,14 @@ function writeTenMillionUsers(writer, encoding, callback) {
     const title = chance.sentence({ words: generateNumBetween(1, 4) });
     const rating = weightedRatings[generateNumBetween(0, weightedRatings.length - 1)];
 
-    let body = chance.paragraph().split(' ');
+    let body = chance.sentence().split(' ');
     body.splice(3, 0, commonWords[generateNumBetween(0, commonWords.length - 1)]);
     body.splice(5, 0, commonWords[generateNumBetween(0, commonWords.length - 1)]);
-    body.splice(8, 0, commonWords[generateNumBetween(0, commonWords.length - 1)]);
-    body.splice(12, 0, commonWords[generateNumBetween(0, commonWords.length - 1)]);
     body = body.join(' ');
-
+    const revNum=j;
     location.reviews.push(
       review={
+        revNum,
         rating,
       travelType: travelTypes[generateNumBetween(0, travelTypes.length - 1)],
       expDate,
@@ -122,8 +125,8 @@ function writeTenMillionUsers(writer, encoding, callback) {
     )
   }
 
-      //-----------------------------------------------------------------------------
-       const data = JSON.Stringify(location);
+      //         /etc/arangodb3/arangoimport -----------------------------------------------------------------------------
+       const data = JSON.stringify(location) + ",";
       if (i === 0) {
         writer.write(data, encoding, callback);
       } else {
@@ -141,5 +144,6 @@ function writeTenMillionUsers(writer, encoding, callback) {
 write()
 }
 writeTenMillionUsers(writeUsers, 'utf-8', () => {
+  console.log('finished')
   writeUsers.end();
 });

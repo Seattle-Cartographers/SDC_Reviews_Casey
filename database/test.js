@@ -2,12 +2,12 @@
 const Chance = require('chance');
 const { generateNumBetween, pickBiased} = require('./helpers.js');
 const fs = require('fs');
-const writeUsers = fs.createWriteStream('reviewstwo.csv');
+const writeUsers = fs.createWriteStream('reviewstooooo.csv');
 writeUsers.write('attractionId, attractionName, reviewNumber, rating, travelType, expDate, lang, body, title, votes, createdAt, helpful\n', 'utf8');
 const chance = new Chance();
 
 function writeTenMillionUsers(writer, encoding, callback) {
-  let i = 10000000;
+  let i = 3;
   let id = 0;
   function write() {
     let ok = true;
