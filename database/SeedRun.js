@@ -61,8 +61,8 @@ const years = [2016, 2017, 2018, 2019, 2020];
 
 //call fs write stream
 //give it the info and then call write
-const writeUsers = fs.createWriteStream('NewTest.json');
-writeUsers.write( '[', 'utf8');
+const writeUsers = fs.createWriteStream('tenMil.json');
+writeUsers.write('','utf8');
 function writeTenMillionUsers(writer, encoding, callback) {
   let i = 10000000;
   let id = 0;
@@ -79,6 +79,7 @@ function writeTenMillionUsers(writer, encoding, callback) {
       const attractionName = chance.city();
 
       const location={
+        _key:attractionId,
         attractionId,
         attractionName,
         reviews:[],
@@ -124,16 +125,37 @@ function writeTenMillionUsers(writer, encoding, callback) {
       }
     )
   }
-
-      //         /etc/arangodb3/arangoimport -----------------------------------------------------------------------------
-       const data = JSON.stringify(location) + ",";
-      if (i === 0) {
-        writer.write(data, encoding, callback);
-      } else {
+  const data = JSON.stringify(location) + '\n';
+  if (i === 0) {
+    writer.write(data, encoding, callback);
+  } else {
 // see if we should continue, or wait
 // don't pass the callback, because we're not done yet.
-        ok = writer.write(data, encoding);
-      }
+    ok = writer.write(data, encoding);
+  }
+
+      //         /etc/arangodb3/arangoimport -----------------------------------------------------------------------------
+  //     if(i === 0){
+  //       const data = JSON.stringify(location) + "]";
+  //       if (i === 0) {
+  //         writer.write(data, encoding, callback);
+  //       } else {
+  // // see if we should continue, or wait
+  // // don't pass the callback, because we're not done yet.
+  //         ok = writer.write(data, encoding);
+  //       }
+
+  //     }else{
+  //       const data = JSON.stringify(location) + ",";
+  //       if (i === 0) {
+  //         writer.write(data, encoding, callback);
+  //       } else {
+  // // see if we should continue, or wait
+  // // don't pass the callback, because we're not done yet.
+  //         ok = writer.write(data, encoding);
+  //       }
+  //     }
+
     } while (i > 0 && ok);
     if (i > 0) {
 // had to stop early!
@@ -143,7 +165,9 @@ function writeTenMillionUsers(writer, encoding, callback) {
   }
 write()
 }
+
 writeTenMillionUsers(writeUsers, 'utf-8', () => {
   console.log('finished')
+
   writeUsers.end();
 });

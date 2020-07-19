@@ -1,12 +1,12 @@
 const Chance = require('chance');
 const { generateNumBetween, pickBiased} = require('./helpers.js');
 const fs = require('fs');
-const writeUsers = fs.createWriteStream('users.csv');
+const writeUsers = fs.createWriteStream('newusers.csv');
 writeUsers.write('id,originCountry,originRegion,contributions,name,profileImage,\n', 'utf8');
 const chance = new Chance();
 
 function writeTenMillionUsers(writer, encoding, callback) {
-  let i = 1000;
+  let i = 10000000;
   let id = 0;
   function write() {
     let ok = true;
@@ -65,6 +65,9 @@ function writeTenMillionUsers(writer, encoding, callback) {
     const travelTypes = ['Family', 'Couple', 'Solo', 'Business', 'Friends'];
     const years = [2016, 2017, 2018, 2019, 2020];
     do {
+      if(i%100000===0){
+        console.log(`sad boy sounds,: ${i}`)
+      }
       i -= 1;
       id += 1;
       const LocId=`${id}`.padStart(8,'0')

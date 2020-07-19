@@ -77,8 +77,9 @@ export default class App extends React.Component {
 
     axios.get(`/${attractionId}/api/reviews`)
       .then((res) => {
-        stateCopy.attractionName = res.data[0].attractionName;
-        stateCopy.numReviews = res.data.length;
+        console.log(res.data)
+        stateCopy.attractionName = res.data.attractionName;
+        stateCopy.numReviews = res.data.reviews.length;
         stateCopy.reviews = res.data;
         this.setState(stateCopy);
       })
@@ -86,6 +87,7 @@ export default class App extends React.Component {
         console.error(err);
       });
   }
+  //sss
 
   getCurrentView() {
     const {
