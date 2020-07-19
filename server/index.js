@@ -1,3 +1,4 @@
+require('newrelic');
 const { Database, aql } = require("arangojs");
 const db = new Database({
   url: "http://localhost:8529",

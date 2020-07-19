@@ -80,7 +80,7 @@ export default class App extends React.Component {
         console.log(res.data)
         stateCopy.attractionName = res.data.attractionName;
         stateCopy.numReviews = res.data.reviews.length;
-        stateCopy.reviews = res.data;
+        stateCopy.reviews = res.data.reviews;
         this.setState(stateCopy);
       })
       .catch((err) => {
