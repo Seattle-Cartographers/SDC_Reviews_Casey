@@ -5,12 +5,3 @@ services:
     environment:
       - DB='database'
     build: ./
-    depends_on:
-      - 'database'
-    ports:
-      - '3004:3004'
-
-  database:
-    image: mongo:4.2.7
-    ports:
-      - '27017:27017'

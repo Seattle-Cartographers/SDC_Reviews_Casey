@@ -61,10 +61,10 @@ const years = [2016, 2017, 2018, 2019, 2020];
 
 //call fs write stream
 //give it the info and then call write
-const writeUsers = fs.createWriteStream('tenMil.json');
+const writeUsers = fs.createWriteStream('test.json');
 writeUsers.write('','utf8');
 function writeTenMillionUsers(writer, encoding, callback) {
-  let i = 10000000;
+  let i = 5;
   let id = 0;
   function write() {
     let ok = true;

@@ -3,3 +3,5 @@ specs
 __mocks__
 .circleci
 images
+tenMil.zip
+tenMil.json

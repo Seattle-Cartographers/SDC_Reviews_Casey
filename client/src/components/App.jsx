@@ -77,7 +77,7 @@ export default class App extends React.Component {
 
     axios.get(`/${attractionId}/api/reviews`)
       .then((res) => {
-        console.log(res.data)
+        //console.log(res.data)
         stateCopy.attractionName = res.data.attractionName;
         stateCopy.numReviews = res.data.reviews.length;
         stateCopy.reviews = res.data.reviews;

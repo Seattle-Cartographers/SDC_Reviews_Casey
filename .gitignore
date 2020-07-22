@@ -7,3 +7,5 @@ specs/coverage
 users.csv
 NewTest.json
 tenMil.json
+newrelic_agent.log
+tenMil.zip
